@@ -1,0 +1,12 @@
+# OpenClaw Railway deployment configuration
+# See https://docs.railway.com/reference/config-as-code
+
+[build]
+builder = "dockerfile"
+
+[deploy]
+startCommand = "node dist/index.js gateway --allow-unconfigured --port $PORT --bind lan"
+healthcheckPath = "/healthz"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
