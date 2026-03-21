@@ -5,6 +5,6 @@
 builder = "dockerfile"
 
 [deploy]
-startCommand = "mkdir -p /tmp/.openclaw ; node -e \"require('fs').writeFileSync('/tmp/.openclaw/openclaw.json', JSON.stringify({gateway:{controlUi:{dangerouslyAllowHostHeaderOriginFallback:true}}}))\" ; exec node openclaw.mjs gateway --allow-unconfigured --port 8080 --bind lan"
+startCommand = "mkdir -p /tmp/.openclaw /home/node/.openclaw ; node -e \"const c=JSON.stringify({gateway:{controlUi:{dangerouslyAllowHostHeaderOriginFallback:true}}});require('fs').writeFileSync('/tmp/.openclaw/openclaw.json',c);require('fs').writeFileSync('/home/node/.openclaw/openclaw.json',c);\" ; exec env OPENCLAW_STATE_DIR=/tmp/.openclaw node openclaw.mjs gateway --allow-unconfigured --port 8080 --bind lan"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 10
