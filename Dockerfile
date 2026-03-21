@@ -232,7 +232,7 @@ USER node
 # Bake CORS config into image so --bind lan works without runtime shell tricks.
 # dangerouslyAllowHostHeaderOriginFallback lets the Control UI accept any Host header.
 RUN mkdir -p /home/node/.openclaw && \
-    printf '{"gateway":{"controlUi":{"dangerouslyAllowHostHeaderOriginFallback":true,"dangerouslyDisableDeviceAuth":true}},"agents":{"defaults":{"model":{"primary":"google/gemini-2.0-flash","fallbacks":["groq/mixtral-8x7b-32768"]}}},"models":{"providers":{"google":{"apiKey":"$GEMINI_API_KEY"},"groq":{"apiKey":"$GROQ_API_KEY"}}}}\n' \
+    printf '{"gateway":{"controlUi":{"dangerouslyAllowHostHeaderOriginFallback":true,"dangerouslyDisableDeviceAuth":true}},"agents":{"defaults":{"model":{"primary":"google/gemini-2.0-flash","fallbacks":["groq/mixtral-8x7b-32768"]}}},"models":{"providers":{"google":{"baseUrl":"https://generativelanguage.googleapis.com/v1beta/openai/","apiKey":"$GEMINI_API_KEY","models":["gemini-2.0-flash"]},"groq":{"baseUrl":"https://api.groq.com/openai/v1","apiKey":"$GROQ_API_KEY","models":["mixtral-8x7b-32768"]}}}}\n' \
     > /home/node/.openclaw/openclaw.json
 
 # Start gateway server with default config.
