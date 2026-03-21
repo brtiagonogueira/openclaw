@@ -5,7 +5,7 @@
 builder = "dockerfile"
 
 [deploy]
-startCommand = "node openclaw.mjs gateway --allow-unconfigured --port 8080 --bind lan"
+startCommand = "mkdir -p /tmp/.openclaw && node -e \"require('fs').writeFileSync('/tmp/.openclaw/openclaw.json', JSON.stringify({gateway:{controlUi:{dangerouslyAllowHostHeaderOriginFallback:true}}}))\" && node openclaw.mjs gateway --allow-unconfigured --port 8080 --bind lan"
 healthcheckPath = "/healthz"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
