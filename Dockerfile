@@ -229,6 +229,13 @@ ENV NODE_ENV=production
 # This reduces the attack surface by preventing container escape via root privileges
 USER node
 
+# Bake CORS config into image so --bind lan works without runtime shell tricks.
+# dangerouslyAllowHostHeaderOriginFallback lets the Control UI accept any Host header.
+RUN mkdir -p /home/node/.openclaw && \
+    printf '{"gateway":{"controlUi":{"dangerouslyAllowHostHeaderOriginFallback":true}}}\n' \
+    > /home/node/.openclaw/openclaw.json
+ENV OPENCLAW_STATE_DIR=/home/node/.openclaw
+
 # Start gateway server with default config.
 # Binds to loopback (127.0.0.1) by default for security.
 #
