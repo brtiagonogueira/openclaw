@@ -232,7 +232,7 @@ USER node
 # Bake CORS config into image so --bind lan works without runtime shell tricks.
 # dangerouslyAllowHostHeaderOriginFallback lets the Control UI accept any Host header.
 RUN mkdir -p /home/node/.openclaw && \
-    printf '{"gateway":{"controlUi":{"dangerouslyAllowHostHeaderOriginFallback":true}}}\n' \
+    printf '{"gateway":{"controlUi":{"dangerouslyAllowHostHeaderOriginFallback":true,"dangerouslyDisableDeviceAuth":true}}}\n' \
     > /home/node/.openclaw/openclaw.json
 ENV OPENCLAW_STATE_DIR=/home/node/.openclaw
 
