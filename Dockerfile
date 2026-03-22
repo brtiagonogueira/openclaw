@@ -233,7 +233,7 @@ USER node
 # Bake CORS config into image so --bind lan works without runtime shell tricks.
 # dangerouslyAllowHostHeaderOriginFallback lets the Control UI accept any Host header.
 RUN mkdir -p /home/node/.openclaw && \
-    printf '{"gateway":{"controlUi":{"dangerouslyAllowHostHeaderOriginFallback":true,"dangerouslyDisableDeviceAuth":true}},"agents":{"defaults":{"model":{"primary":"google/gemini-3-flash-preview","fallbacks":["groq/llama-3.3-70b-versatile"]}}},"channels":{"telegram":{"dmPolicy":"open"}}}\n' \
+    printf '{"gateway":{"controlUi":{"dangerouslyAllowHostHeaderOriginFallback":true,"dangerouslyDisableDeviceAuth":true}},"agents":{"defaults":{"model":{"primary":"google/gemini-3-flash-preview","fallbacks":["groq/llama-3.3-70b-versatile"]}}},"channels":{"telegram":{"dmPolicy":"open","allowFrom":["*"]}}}\n' \
     > /home/node/.openclaw/openclaw.json
 
 # Start gateway server with default config.
