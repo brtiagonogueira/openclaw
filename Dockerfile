@@ -137,6 +137,7 @@ RUN apt-get update && \
 RUN chown node:node /app
 
 COPY --from=runtime-assets --chown=node:node /app/dist ./dist
+COPY --from=runtime-assets --chown=node:node /app/dist-runtime ./dist-runtime
 COPY --from=runtime-assets --chown=node:node /app/node_modules ./node_modules
 COPY --from=runtime-assets --chown=node:node /app/package.json .
 COPY --from=runtime-assets --chown=node:node /app/openclaw.mjs .
@@ -144,9 +145,9 @@ COPY --from=runtime-assets --chown=node:node /app/extensions ./extensions
 COPY --from=runtime-assets --chown=node:node /app/skills ./skills
 COPY --from=runtime-assets --chown=node:node /app/docs ./docs
 
-# In npm-installed Docker images, prefer the copied source extension tree for
-# bundled discovery so package metadata that points at source entries stays valid.
-ENV OPENCLAW_BUNDLED_PLUGINS_DIR=/app/extensions
+# Use compiled dist-runtime/extensions so plugins load pre-bundled JS instead
+# of raw TypeScript source that requires src/ to be present at runtime.
+ENV OPENCLAW_BUNDLED_PLUGINS_DIR=/app/dist-runtime/extensions
 
 # Keep pnpm available in the runtime image for container-local workflows.
 # Use a shared Corepack home so the non-root `node` user does not need a
@@ -228,10 +229,6 @@ ENV NODE_ENV=production
 # The node:24-bookworm image includes a 'node' user (uid 1000)
 # This reduces the attack surface by preventing container escape via root privileges
 USER node
-
-# Extensions import from ../../src/plugin-sdk/ at runtime but only dist/ is copied.
-# Symlink src -> dist so those paths resolve to the compiled output.
-RUN ln -s /app/dist /app/src
 
 # Bake CORS config into image so --bind lan works without runtime shell tricks.
 # dangerouslyAllowHostHeaderOriginFallback lets the Control UI accept any Host header.
