@@ -229,6 +229,10 @@ ENV NODE_ENV=production
 # This reduces the attack surface by preventing container escape via root privileges
 USER node
 
+# Extensions import from ../../src/plugin-sdk/ at runtime but only dist/ is copied.
+# Symlink src -> dist so those paths resolve to the compiled output.
+RUN ln -s /app/dist /app/src
+
 # Bake CORS config into image so --bind lan works without runtime shell tricks.
 # dangerouslyAllowHostHeaderOriginFallback lets the Control UI accept any Host header.
 RUN mkdir -p /home/node/.openclaw && \
